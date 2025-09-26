@@ -12,7 +12,6 @@ export function MusicCharacter({ soundFile}: CharacterProps) {
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [pos, setPos] = useState({ x: 150, y: 150 });
     
-  
     const audioTrack = useRef<Tone.Player | null>(null);
 
     const {beat, isPlaying, startPlaying, stopPlaying, activeTracks, increment, decrement} = useBeat();
@@ -44,8 +43,9 @@ export function MusicCharacter({ soundFile}: CharacterProps) {
             audioTrack.current = new Tone.Player({
                 url: soundFile,
                 loop: true,
+                loopStart: 0,
+                loopEnd: 15.36
         }).toDestination();
-
         }
         audioTrack.current.onstop = () => {
             console.log('stopped');
@@ -53,11 +53,27 @@ export function MusicCharacter({ soundFile}: CharacterProps) {
                 decrement();
                 if (activeTracks <= 1) stopPlaying();
             };
-        if (armed && isPlaying && beat === 1 && audioTrack.current){
-            audioTrack.current.start();
-            setArmed(false);
-            setTrackPlaying(true);
-            increment();
+        if (armed && isPlaying && audioTrack.current){
+            if (beat === 1){
+                audioTrack.current.loopStart = 0;
+                audioTrack.current.loopEnd = 15.36;
+                audioTrack.current.start();
+                setArmed(false);
+                setTrackPlaying(true);
+                increment();
+            }
+            else if (beat > 1 && beat < 18){
+                audioTrack.current.loopStart = 7.68;
+                audioTrack.current.loopEnd = 15.36;
+                if (beat === 17){
+                    audioTrack.current.start();
+                    setArmed(false);
+                    setTrackPlaying(true);
+                    increment();
+                    audioTrack.current.loopStart = 0;
+                    audioTrack.current.loopEnd = 15.36;
+                }
+            }
         }
     }, [beat, isPlaying, armed])
 
@@ -69,7 +85,6 @@ export function MusicCharacter({ soundFile}: CharacterProps) {
             if(!isPlaying){
                 startPlaying();
                 setTrackPlaying(true);
-                increment();
                 console.log(`Armed: ${armed}`);
             }
         }

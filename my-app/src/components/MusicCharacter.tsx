@@ -3,15 +3,11 @@ import { useRef, useState, useEffect } from "react";
 import { useBeat } from "./BeatContext";
 
 type CharacterProps = {
-    soundFile: string;
+    width?: number;
+    height?: number;
 }
 
-export function MusicCharacter({ soundFile}: CharacterProps) {
-
-    const [isDragging, setIsDragging] = useState(false);
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const [pos, setPos] = useState({ x: 150, y: 150 });
-    
+export function MusicCharacter({ }: CharacterProps) {
     const audioTrack = useRef<Tone.Player | null>(null);
 
     const {beat, isPlaying, startPlaying, stopPlaying, activeTracks, increment, decrement} = useBeat();
@@ -19,41 +15,34 @@ export function MusicCharacter({ soundFile}: CharacterProps) {
     const [armed, setArmed] = useState(false);
     const [trackPlaying, setTrackPlaying] = useState(false);
 
-    const handleMouseDown = (e: React.MouseEvent) => {
-        setIsDragging(true);
-        setOffset({
-            x: e.clientX - pos.x,
-            y: e.clientY - pos.y
-        });
-    }
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (isDragging) {
-            setPos({
-                x: e.clientX - offset.x,
-                y: e.clientY - offset.y
-            });
-        };
-    }
-
-    const handleMouseUp = () => setIsDragging(false);  
-
-    useEffect(() => {
-        if (!audioTrack.current) {
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        const soundFile = e.dataTransfer.getData('soundFile');
+        if (soundFile){
+            setArmed(false);
+            setTrackPlaying(false);
+            if (audioTrack.current){
+                audioTrack.current.dispose();
+            }
             audioTrack.current = new Tone.Player({
                 url: soundFile,
                 loop: true,
                 loopStart: 0,
                 loopEnd: 15.36
-        }).toDestination();
-        }
-        audioTrack.current.onstop = () => {
+            }).toDestination();
+            audioTrack.current.onstop = () => {
             console.log('stopped');
                 setTrackPlaying(false);
                 decrement();
                 if (activeTracks <= 1) stopPlaying();
+                
             };
-        if (armed && isPlaying && audioTrack.current){
+        }
+    };
+
+    useEffect(() => {
+        if (!audioTrack.current || !armed) return;
+        if (isPlaying){
             if (beat === 1){
                 audioTrack.current.loopStart = 0;
                 audioTrack.current.loopEnd = 15.36;
@@ -63,7 +52,7 @@ export function MusicCharacter({ soundFile}: CharacterProps) {
                 increment();
             }
             else if (beat > 1 && beat < 18){
-                audioTrack.current.loopStart = 7.68;
+                audioTrack.current.loopStart = 7.695;
                 audioTrack.current.loopEnd = 15.36;
                 if (beat === 17){
                     audioTrack.current.start();
@@ -93,9 +82,9 @@ export function MusicCharacter({ soundFile}: CharacterProps) {
         }
     };
     
-    return <div onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} style= {{ position: 'absolute', left: pos.x, top: pos.y, cursor: isDragging ? 'grabbing' : 'grab' }}>
-        <p>Track: {soundFile} {activeTracks}</p>
-        <button onClick={playAudio}>Play Sound</button>;
+    return <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} className="m-10 p-4 bg-black outline-blue-300">
+        <p className="text-green-500">Drag and Drop</p>
+        <button onClick={playAudio}>Play Sound</button>
     </div>
 }
 export default MusicCharacter;

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import * as Tone from "tone";
 import { useBeat } from "./BeatContext";
-import MusicCharacter from "./MusicCharacter";
 
 type MetronomeProps = {
     bpm?: number;
@@ -24,6 +23,7 @@ export function Metronome({bpm = 125}: MetronomeProps) {
         else {
             Tone.Transport.stop();
             loopRef.current?.dispose();
+            setBeat(0);
         }
     }, [isPlaying, bpm, setBeat]);
 

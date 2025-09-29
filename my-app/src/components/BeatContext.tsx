@@ -23,7 +23,7 @@ export function BeatProvider({ children }: { children: React.ReactNode }) {
     const [beat, setBeat] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [activeTracks, setActiveTracks] = useState(0);
+    const [activeTracks, setActiveTracks] = useState(1);
 
     const increment = () => setActiveTracks(c => c + 1);
     const decrement = () => setActiveTracks(c => Math.max(c-1, 0));

@@ -4,12 +4,15 @@ type DraggableCharacterProps = {
     id: string;
     soundFile: string;
     label: string;
+    strokeColor: string;
 }
 
-export function DraggableCharacter({id, soundFile, label}: DraggableCharacterProps) {
+export function DraggableCharacter({id, soundFile, label, strokeColor }: DraggableCharacterProps) {
     const handleDragStart = (e: React.DragEvent) => {
         e.dataTransfer.setData('soundFile', soundFile);
+        console.log(`data set by draggable character: ${soundFile}`);
         e.dataTransfer.setData('label', label);
+        e.dataTransfer.setData('strokeColor', strokeColor);
     };
 
     return (

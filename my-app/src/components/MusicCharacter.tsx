@@ -12,17 +12,23 @@ export function MusicCharacter() {
     const [armed, setArmed] = useState(false);
     const [trackPlaying, setTrackPlaying] = useState(false);
 
-    const [currentTrack, setCurrentTrack] = useState<string>("");
+    const [currentTrack, setCurrentTrack] = useState<string | null>("");
     const [currentStroke, setCurrentStroke] = useState<string>("");
 
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         const droppedFile = e.dataTransfer.getData('soundFile');
         const droppedStroke = e.dataTransfer.getData('strokeColor');
+
         setCurrentTrack(droppedFile);
+        console.log('set current track to:', currentTrack)
         setCurrentStroke(droppedStroke);
-        console.log(`soundFile transferred to currentTrack: ${currentTrack}`);
-        if (droppedFile) {
+        console.log(`soundFile transferred to currentTrack: ${droppedFile}`);
+        
+        if (!droppedFile) {
+            console.log('dropped file not detected');
+            return;
+        } 
             setArmed(false);
             setTrackPlaying(false);
             increment();
@@ -34,8 +40,11 @@ export function MusicCharacter() {
                 loop: true,
                 loopStart: 0,
                 loopEnd: 15.36,
+                onload: () => {
+                    console.log('audio played');
+                    playAudio();
+                }
             }).toDestination();
-            console.log('audiotrack.current created');
             
             audioTrack.current.onstop = () => {
                 console.log('stopped');
@@ -43,9 +52,6 @@ export function MusicCharacter() {
                 decrement();
                 if (activeTracks < 1) stopPlaying();
             };
-        }
-        playAudio();
-        console.log('audio played');
     };
 
     const playAudio = async () => {
@@ -66,11 +72,10 @@ export function MusicCharacter() {
     };    
 
     useEffect(() => {
-        if (!audioTrack.current || !armed) {
-            return;
-        }
+        if (!armed) return;
+        if (!audioTrack.current) return;
         if (isPlaying) {
-            console.log('useEffect is playing');
+            console.log('useEffect is armed track');
             if (beat === 1) {
                 console.log('useEffect is playing on beat1');
                 audioTrack.current.loopStart = 0;
@@ -93,9 +98,10 @@ export function MusicCharacter() {
         }
     }, [beat, isPlaying, armed])
 
-    return <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} className="m-10 p-4 bg-black">
-        <p className="text-green-500 ">Drag and Drop</p>
-        <WaveformSVG player={audioTrack.current} stroke={currentStroke}/>
+    return <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop} className="m-1 bg-black">
+        <p className="text-white ">Drag and Drop</p>
+            <WaveformSVG player={audioTrack.current} stroke={currentStroke}/>
+        
     </div>
 }
 

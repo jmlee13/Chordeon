@@ -18,7 +18,7 @@ export function DraggableCharacter({id, soundFile, label, strokeColor }: Draggab
     return (
         <div draggable
             onDragStart={handleDragStart}
-            className="flex justify-center">
+            className="flex justify-evenly">
                 <p className=" m-10 p-2 bg-orange-500"> {label}</p>
             </div>
     );

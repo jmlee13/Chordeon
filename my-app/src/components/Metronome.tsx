@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import * as Tone from "tone";
 import { useBeat } from "./BeatContext";
 
@@ -28,7 +28,7 @@ export function Metronome({bpm = 125}: MetronomeProps) {
     }, [isPlaying, bpm, setBeat]);
 
     return (
-        <p>Beat: {beat} / 32</p>
+        <p></p>
     )
 }
 

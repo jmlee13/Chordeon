@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import * as Tone from "tone";
 
 type WaveformSVGProps = {
@@ -11,7 +11,7 @@ type WaveformSVGProps = {
     strokeWidth?: number;
 }
 
-export function WaveformSVG({ player, width = 200, height = 120, samples = 256, mirror = true, stroke, strokeWidth = 1.5 }: WaveformSVGProps) {
+export function WaveformSVG({ player, width = 150, height = 75, samples = 128, mirror = true, stroke, strokeWidth = 1.5 }: WaveformSVGProps) {
     const svgRef = useRef<SVGSVGElement | null>(null);
     const pathRef = useRef<SVGPathElement | null>(null);
     const analyserRef = useRef<Tone.Analyser | null>(null);
@@ -80,10 +80,10 @@ export function WaveformSVG({ player, width = 200, height = 120, samples = 256, 
         };
     }, [player, width, height, samples, mirror, stroke, strokeWidth]);
     return (
-        <div>
-            <svg ref={svgRef} width={width} height={height} style={{ display: 'block' }}>
-                <path ref={pathRef} d='' />
-            </svg>
+            <div className="w-[158px] h-[100px] flex flex-col justify-center translate-y-8 border-4 border-gray-500 rounded-2xl z-10 bg-black ">
+                <svg ref={svgRef} width={width} height={height} style={{ display: 'block' }}>
+                    <path ref={pathRef} d='' />
+                </svg>
         </div>
     )
 }

@@ -10,7 +10,7 @@ type DraggableCharacterProps = {
 export function DraggableCharacter({id, soundFile, label, strokeColor }: DraggableCharacterProps) {
     const handleDragStart = (e: React.DragEvent) => {
         e.dataTransfer.setData('soundFile', soundFile);
-        console.log(`data set by draggable character: ${soundFile}`);
+        console.log(soundFile);
         e.dataTransfer.setData('label', label);
         e.dataTransfer.setData('strokeColor', strokeColor);
     };
@@ -19,8 +19,8 @@ export function DraggableCharacter({id, soundFile, label, strokeColor }: Draggab
         <div draggable
             onDragStart={handleDragStart}
             className="flex justify-evenly">
-                <p className=" m-10 p-2 bg-orange-500"> {label}</p>
-            </div>
+            <p className="w-24 h-24 p-2 m-2 bg-white rounded-full border-black border-8"> {label}</p>
+        </div>
     );
 };
 

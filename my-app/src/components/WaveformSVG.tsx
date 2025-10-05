@@ -11,7 +11,7 @@ type WaveformSVGProps = {
     strokeWidth?: number;
 }
 
-export function WaveformSVG({ player, width = 150, height = 75, samples = 128, mirror = true, stroke, strokeWidth = 1.5 }: WaveformSVGProps) {
+export function WaveformSVG({ player, width = 150, height = 95, samples = 512, mirror = true, stroke, strokeWidth = 1.5 }: WaveformSVGProps) {
     const svgRef = useRef<SVGSVGElement | null>(null);
     const pathRef = useRef<SVGPathElement | null>(null);
     const analyserRef = useRef<Tone.Analyser | null>(null);

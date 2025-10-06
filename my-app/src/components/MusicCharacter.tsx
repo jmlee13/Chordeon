@@ -3,13 +3,27 @@ import { useRef, useState, useEffect } from "react";
 import { useBeat } from "./BeatContext";
 import WaveformSVG from "./WaveformSVG";
 import MicrophoneIcon from "./MicrophoneIcon";
+import { useDrop } from "react-dnd";
+
+type MusicCharacterProps = {
+    id: string;
+    soundFile: string;
+    icon: string;
+    strokeColor: string;
+    strokeColorDark: string;
+};
+
+const ItemTypes = {
+    CHARACTER: 'character',
+}
 
 export function MusicCharacter() {
     const audioTrack = useRef<Tone.Player | null>(null);
 
+    const ref = useRef<HTMLDivElement>(null);
+
     const { beat, numberOfLoops, isPlaying, startPlaying, stopPlaying, activeTracks, increment, decrement } = useBeat();
 
-    const [armed, setArmed] = useState(false);
     const [trackPlaying, setTrackPlaying] = useState(false);
 
     const [currentTrack, setCurrentTrack] = useState<string | null>("");
@@ -19,32 +33,23 @@ export function MusicCharacter() {
     const loopLength = Tone.Time("8m").toSeconds();
     const startOffset = loopLength * numberOfLoops;
 
-    const handleDrop = (e: React.DragEvent) => {
+    const [{ isOver, canDrop }, drop] = useDrop<MusicCharacterProps, void, { isOver: boolean; canDrop: boolean }>({
+        accept: ItemTypes.CHARACTER,
+        drop: (item) => {
 
-        e.preventDefault();
-        const droppedFile = e.dataTransfer.getData('soundFile');
-        const droppedStroke = e.dataTransfer.getData('strokeColor');
-        const hoverStroke = e.dataTransfer.getData('strokeColorDark');
+        if (!item.soundFile) return;
 
-        if (!droppedFile) {
-            console.log('dropped file not detected');
-            return;
-        }
         if (audioTrack.current && audioTrack.current.state === 'started') {
             return;
         }
 
-        setCurrentTrack(droppedFile);
-        console.log('set current track to:', droppedFile)
-        setCurrentStroke(droppedStroke);
-        console.log(`soundFile transferred to currentTrack: ${droppedFile}`);
-        console.log('stroke:', droppedStroke);
-        setCurrentHoverStroke(hoverStroke);
-        setArmed(false);
+        setCurrentTrack(item.soundFile);
+        setCurrentStroke(item.strokeColor);
+        setCurrentHoverStroke(item.strokeColorDark);
         setTrackPlaying(false);
 
         audioTrack.current = new Tone.Player({
-            url: droppedFile,
+            url: item.soundFile,
             loop: true,
             loopStart: "0:0:0",
             loopEnd: "8:0:0",
@@ -72,11 +77,15 @@ export function MusicCharacter() {
             increment();
             setTrackPlaying(true);
         }
-    };
+    }
+    });
 
     useEffect(() => {
         if (activeTracks === 0) {
             stopPlaying();
+        }
+        if (ref.current) {
+            drop(ref.current);
         }
     }, [beat]);
 
@@ -98,7 +107,7 @@ export function MusicCharacter() {
 
     return (
         <div>
-            <div className="w-[200px] h-[200px] flex justify-center items-center rounded-3xl border-8 border-black p-4" style={{ backgroundColor: currentStroke || "#4d4d4d" }}
+            <div ref={ref} className="w-[200px] h-[200px] flex justify-center items-center rounded-3xl border-8 border-black p-4" style={{ backgroundColor: currentStroke || "#4d4d4d", opacity: isOver && canDrop ? 0.7 : 1, transition: "background-color 0.3s" }}
                 onMouseEnter={(e) => {
                     if (currentStroke) {
                         e.currentTarget.style.backgroundColor = currentHoverStroke;
@@ -116,11 +125,11 @@ export function MusicCharacter() {
                         e.currentTarget.style.backgroundColor = "#4d4d4d";
                     }
                 }}
-                onClick={handleDelete} onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+                onClick={handleDelete}>
                 <WaveformSVG player={audioTrack.current} stroke={currentStroke} />
             </div>
-            <div className="flex justify-center" onClick={handleMute}>
-                <MicrophoneIcon />
+            <div className="inline-block" onClick={handleMute}>
+                <MicrophoneIcon/>
             </div>
         </div>
     )

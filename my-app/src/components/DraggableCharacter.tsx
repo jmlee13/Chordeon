@@ -1,27 +1,39 @@
-import React from "react";
+import { useRef, useEffect } from "react";
+import { useDrag } from "react-dnd";
 
 type DraggableCharacterProps = {
     id: string;
     soundFile: string;
-    label: string;
+    icon: string;
     strokeColor: string;
     strokeColorDark: string;
 }
 
-export function DraggableCharacter({id, soundFile, label, strokeColor, strokeColorDark}: DraggableCharacterProps) {
-    const handleDragStart = (e: React.DragEvent) => {
-        e.dataTransfer.setData('soundFile', soundFile);
-        console.log(soundFile);
-        e.dataTransfer.setData('label', label);
-        e.dataTransfer.setData('strokeColor', strokeColor);
-        e.dataTransfer.setData('strokeColorDark', strokeColorDark);
-    };
+const ItemTypes = {
+    CHARACTER: 'character',
+};
+
+export function DraggableCharacter({id, soundFile, icon, strokeColor, strokeColorDark}: DraggableCharacterProps) {
+    const ref = useRef<HTMLDivElement>(null);
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: ItemTypes.CHARACTER,
+        item: { id, soundFile, icon, strokeColor, strokeColorDark },
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    }));
+
+    useEffect(() => {
+        if (ref.current) {
+            drag(ref.current);
+        }
+    }, [drag]);
 
     return (
-        <div draggable
-            onDragStart={handleDragStart}
-            className="flex justify-evenly">
-            <p className="w-24 h-24 p-2 m-2 bg-white rounded-full border-black border-8"> {label}</p>
+        <div ref={ref} style={{ opacity: isDragging ? 0 : 1, cursor: "grab" }} className="flex justify-evenly">
+            <div className="w-18 h-18 flex justify-center items-center rounded-full border-4 border-black p-1">
+                <img src={icon} className="rounded-full"></img>
+            </div>
         </div>
     );
 };

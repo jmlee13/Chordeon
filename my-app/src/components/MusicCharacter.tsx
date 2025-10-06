@@ -16,9 +16,11 @@ export function MusicCharacter() {
     const [currentStroke, setCurrentStroke] = useState<string>("");
     const [currentHoverStroke, setCurrentHoverStroke] = useState<string>("");
 
+    const loopLength = Tone.Time("8m").toSeconds();
+    const startOffset = loopLength * numberOfLoops;
 
     const handleDrop = (e: React.DragEvent) => {
-        
+
         e.preventDefault();
         const droppedFile = e.dataTransfer.getData('soundFile');
         const droppedStroke = e.dataTransfer.getData('strokeColor');
@@ -31,7 +33,7 @@ export function MusicCharacter() {
         if (audioTrack.current && audioTrack.current.state === 'started') {
             return;
         }
-        
+
         setCurrentTrack(droppedFile);
         console.log('set current track to:', droppedFile)
         setCurrentStroke(droppedStroke);
@@ -40,7 +42,6 @@ export function MusicCharacter() {
         setCurrentHoverStroke(hoverStroke);
         setArmed(false);
         setTrackPlaying(false);
-        
 
         audioTrack.current = new Tone.Player({
             url: droppedFile,
@@ -51,40 +52,42 @@ export function MusicCharacter() {
             autostart: false,
             onload: () => {
                 startPlaying();
-                console.log(`numberOfLoops: ${numberOfLoops}`)
-                if (beat === 0){
-                    audioTrack.current?.sync().start(0);
+
+                if (beat === 0) {
+                    audioTrack.current?.sync().start(startOffset);
                     console.log('started at beginning')
-                    console.log(beat)
+                    console.log(startOffset)
                 }
-                else if (beat > 1 && beat < 17) {
-                    audioTrack.current?.sync().start("4:0:0", 15.36 / 2);
+                else if (beat > 0 && beat < 17) {
+                    audioTrack.current?.sync().start(startOffset + loopLength / 2, loopLength / 2);
                     console.log('queued for halfway')
-                    console.log(beat)
                 }
                 else {
-                    audioTrack.current?.sync().start("8:0:0");
+                    audioTrack.current?.sync().start(startOffset + loopLength);
                     console.log('queued for next loop cycle')
                 }
             }
         }).toDestination();
-        if (!trackPlaying){
+        if (!trackPlaying) {
             increment();
             setTrackPlaying(true);
         }
     };
 
+    useEffect(() => {
+        if (activeTracks === 0) {
+            stopPlaying();
+        }
+    }, [beat]);
+
     const handleDelete = () => {
-        if (trackPlaying){
+        if (trackPlaying) {
             audioTrack.current?.dispose();
             console.log('stopped');
             setTrackPlaying(false);
             decrement();
             setCurrentStroke('');
         }
-        
-        if (activeTracks < 1) stopPlaying();
-        console.log(activeTracks);
     }
 
     const handleMute = () => {

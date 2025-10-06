@@ -4,12 +4,15 @@ import MusicCharacter from './components/MusicCharacter';
 import Metronome from './components/Metronome';
 import { BeatProvider }  from './components/BeatContext';
 import DraggableCharacter from './components/DraggableCharacter';
+import LoopTracker from './components/LoopTracker';
+import { Loop } from 'tone';
 
 function App() {
   return (
     <BeatProvider>
       <div>
         <Metronome/>
+        <LoopTracker/>
         <div className = 'flex justify-center gap-2'>
         <MusicCharacter/>
         <MusicCharacter/>

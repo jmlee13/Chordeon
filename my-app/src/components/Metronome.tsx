@@ -7,7 +7,7 @@ type MetronomeProps = {
 }
 
 export function Metronome({bpm = 125}: MetronomeProps) {
-    const { beat, isPlaying, setBeat, setNumberOfLoops} = useBeat();
+    const { beat, isPlaying, setBeat, numberOfLoops, setNumberOfLoops} = useBeat();
     const loopRef = useRef<Tone.Loop | null>(null);
     
     useEffect(() => {
@@ -19,11 +19,14 @@ export function Metronome({bpm = 125}: MetronomeProps) {
             Tone.Transport.bpm.value = bpm;
             loopRef.current.start(0);
             Tone.Transport.start("+0.1");
+            
         }
-        else {
+        if (!isPlaying){
             Tone.Transport.stop();
+            loopRef.current?.stop();
             loopRef.current?.dispose();
             setBeat(0);
+            
         }
     }, [isPlaying, bpm, setBeat]);
 

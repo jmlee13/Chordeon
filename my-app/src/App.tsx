@@ -28,7 +28,7 @@ function App() {
         </div>
         </DndProvider>
 
-        <div className='w-screen h-[100px]'></div>
+        <div className='w-screen'></div>
 
         <DndProvider backend={HTML5Backend}>
         <div className = "flex justify-center">

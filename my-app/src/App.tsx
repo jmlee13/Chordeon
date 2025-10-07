@@ -31,7 +31,8 @@ function App() {
         <div className='w-screen h-[100px]'></div>
 
         <DndProvider backend={HTML5Backend}>
-        <div className = 'flex justify-center'>
+        <div className = "flex justify-center">
+        <div className = 'flex justify-center max-w-[900px] flex-wrap gap-5'>
         <DraggableCharacter id='kickPattern' soundFile='/audio/edm1kick.wav' icon='/icons/kick.png' strokeColor='#ED2F07' strokeColorDark='#991a00'/>
         <DraggableCharacter id='snarePattern' soundFile='/audio/edm2snare.wav' icon='/icons/snare.png' strokeColor='#30C0FF' strokeColorDark='#2080ac'/>
         <DraggableCharacter id='hihatsPattern' soundFile='/audio/edm3hihats.wav' icon='/icons/hat.png' strokeColor='#F6FF4A' strokeColorDark='#b7be27'/>
@@ -42,9 +43,10 @@ function App() {
         <DraggableCharacter id='reverbclapPattern' soundFile='/audio/edm11reverbclap.wav' icon='/icons/echoclap.png' strokeColor='#F3A1FF' strokeColorDark='#ca75d7'/>
         <DraggableCharacter id='subPattern' soundFile='/audio/edm12sub.wav' icon='/icons/sub.png' strokeColor='#FF0D87' strokeColorDark='#aa0959'/>
         <DraggableCharacter id='ridePattern' soundFile='/audio/edm13ride.wav' icon='/icons/ride.png' strokeColor='#A3FF7D' strokeColorDark='#72ce4b'/>
-        <DraggableCharacter id='tomsPattern' soundFile='/audio/edm14toms.wav' icon='toms' strokeColor='#FF9321' strokeColorDark='#b46918'/>
-        <DraggableCharacter id='clapsPattern' soundFile='/audio/edm15claps.wav' icon='claps' strokeColor='#FFFFFF' strokeColorDark='#bfbfbf'/>
-        <DraggableCharacter id='heyPattern' soundFile='/audio/edm16hey.wav' icon='hey' strokeColor='#ADFFFD' strokeColorDark='#79d2d1'/>
+        <DraggableCharacter id='tomsPattern' soundFile='/audio/edm14toms.wav' icon='/icons/toms.png' strokeColor='#FF9321' strokeColorDark='#b46918'/>
+        <DraggableCharacter id='clapsPattern' soundFile='/audio/edm15claps.wav' icon='/icons/claps.png' strokeColor='#FFFFFF' strokeColorDark='#bfbfbf'/>
+        <DraggableCharacter id='heyPattern' soundFile='/audio/edm16hey.wav' icon='/icons/hey.png' strokeColor='#ADFFFD' strokeColorDark='#79d2d1'/>
+        </div>
         </div>
         </DndProvider>
       

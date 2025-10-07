@@ -31,7 +31,6 @@ export function MusicCharacter() {
     const [isMuted, setMuted] = useState(false);
     const [isMutable, setIsMutable] = useState(false);
 
-    const [currentTrack, setCurrentTrack] = useState<string | null>("");
     const [currentStroke, setCurrentStroke] = useState<string>("");
     const [currentHoverStroke, setCurrentHoverStroke] = useState<string>("");
 
@@ -48,7 +47,6 @@ export function MusicCharacter() {
                 return;
             }
 
-            setCurrentTrack(item.soundFile);
             setCurrentStroke(item.strokeColor);
             setCurrentHoverStroke(item.strokeColorDark);
             setTrackPlaying(false);
@@ -80,7 +78,6 @@ export function MusicCharacter() {
                         setActive(true);
                         setTimeout(() => setActive(false), (31 - beat) * Tone.Time("4n").toSeconds() * 1000);
                     }
-                    
                 }
             }).toDestination();
             console.log(isActive);

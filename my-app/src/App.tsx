@@ -11,7 +11,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 function App() {
   return (
     <>
-    <h1 className="font-rushblade text-9xl flex justify-center mb-[100px] text-white">Harmonix</h1>
+    <h1 className="font-rushblade text-9xl flex justify-center mb-[100px] text-white">Chordeon</h1>
     <BeatProvider>
       <div>
         <Metronome/>

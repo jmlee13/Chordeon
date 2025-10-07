@@ -11,6 +11,8 @@ type BeatContextType = {
     activeTracks: number;
     increment: () => void;
     decrement: () => void;
+    isActive: boolean;
+    setActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BeatContext = createContext<BeatContextType | null>(null);
@@ -26,6 +28,8 @@ export function BeatProvider({ children }: { children: React.ReactNode }) {
     const [numberOfLoops, setNumberOfLoops] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
 
+    const [isActive, setActive] = useState(false);
+
     const [activeTracks, setActiveTracks] = useState(0);
 
     const increment = () => setActiveTracks((c) => c + 1);
@@ -34,7 +38,7 @@ export function BeatProvider({ children }: { children: React.ReactNode }) {
     const startPlaying = () => setIsPlaying(true);
     const stopPlaying = () => setIsPlaying(false);
     return (
-        <BeatContext.Provider value={{ beat, setBeat, numberOfLoops, setNumberOfLoops, isPlaying, startPlaying, stopPlaying, activeTracks, increment, decrement}}>
+        <BeatContext.Provider value={{ beat, setBeat, numberOfLoops, setNumberOfLoops, isPlaying, startPlaying, stopPlaying, activeTracks, increment, decrement, isActive, setActive}}>
             {children}
         </BeatContext.Provider>
     )

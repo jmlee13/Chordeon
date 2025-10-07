@@ -31,7 +31,7 @@ export function DraggableCharacter({id, soundFile, icon, strokeColor, strokeColo
 
     return (
         <div ref={ref} style={{ opacity: isDragging ? 0 : 1, cursor: "grab" }} className="flex justify-evenly">
-            <div className="w-18 h-18 flex justify-center items-center rounded-full border-4 border-black p-1">
+            <div className="w-18 h-18 flex justify-center items-center rounded-full border-[6px] border-black">
                 <img src={icon} className="rounded-full"></img>
             </div>
         </div>

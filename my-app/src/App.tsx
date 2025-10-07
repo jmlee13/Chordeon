@@ -14,7 +14,6 @@ function App() {
       <div>
         <Metronome/>
         <LoopTracker/>
-        
         <DndProvider backend={HTML5Backend}>
         <div className = 'flex justify-center gap-2'>
         <MusicCharacter/>

@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useBeat } from "./BeatContext";
 import WaveformSVG from "./WaveformSVG";
 import MicrophoneIcon from "./MicrophoneIcon";
+import ProgressBar from "./ProgressBar";
 import { useDrop } from "react-dnd";
 
 type MusicCharacterProps = {
@@ -22,9 +23,11 @@ export function MusicCharacter() {
 
     const ref = useRef<HTMLDivElement>(null);
 
-    const { beat, numberOfLoops, isPlaying, startPlaying, stopPlaying, activeTracks, increment, decrement } = useBeat();
+    const { beat, numberOfLoops, startPlaying, stopPlaying, activeTracks, increment, decrement } = useBeat();
 
     const [trackPlaying, setTrackPlaying] = useState(false);
+
+    const [isActive, setActive] = useState(false);
 
     const [currentTrack, setCurrentTrack] = useState<string | null>("");
     const [currentStroke, setCurrentStroke] = useState<string>("");
@@ -37,47 +40,50 @@ export function MusicCharacter() {
         accept: ItemTypes.CHARACTER,
         drop: (item) => {
 
-        if (!item.soundFile) return;
+            if (!item.soundFile) return;
 
-        if (audioTrack.current && audioTrack.current.state === 'started') {
-            return;
-        }
-
-        setCurrentTrack(item.soundFile);
-        setCurrentStroke(item.strokeColor);
-        setCurrentHoverStroke(item.strokeColorDark);
-        setTrackPlaying(false);
-
-        audioTrack.current = new Tone.Player({
-            url: item.soundFile,
-            loop: true,
-            loopStart: "0:0:0",
-            loopEnd: "8:0:0",
-            volume: -2,
-            autostart: false,
-            onload: () => {
-                startPlaying();
-
-                if (beat === 0) {
-                    audioTrack.current?.sync().start(startOffset);
-                    console.log('started at beginning')
-                    console.log(startOffset)
-                }
-                else if (beat > 0 && beat < 17) {
-                    audioTrack.current?.sync().start(startOffset + loopLength / 2, loopLength / 2);
-                    console.log('queued for halfway')
-                }
-                else {
-                    audioTrack.current?.sync().start(startOffset + loopLength);
-                    console.log('queued for next loop cycle')
-                }
+            if (audioTrack.current && audioTrack.current.state === 'started') {
+                return;
             }
-        }).toDestination();
-        if (!trackPlaying) {
-            increment();
-            setTrackPlaying(true);
-        }
-    }
+
+            setCurrentTrack(item.soundFile);
+            setCurrentStroke(item.strokeColor);
+            setCurrentHoverStroke(item.strokeColorDark);
+            setTrackPlaying(false);
+
+            console.log(isActive);
+
+            audioTrack.current = new Tone.Player({
+                url: item.soundFile,
+                loop: true,
+                loopStart: "0:0:0",
+                loopEnd: "8:0:0",
+                volume: -2,
+                autostart: false,
+                onload: () => {
+                    startPlaying();
+                    if (beat === 0) {
+                        audioTrack.current?.sync().start(startOffset);
+                    }
+                    else if (beat > 0 && beat < 17) {
+                        audioTrack.current?.sync().start(startOffset + loopLength / 2, loopLength / 2);
+                        setActive(true);
+                        setTimeout(() => setActive(false), (15.1 - beat) * Tone.Time("4n").toSeconds() * 1000);
+                    }
+                    else {
+                        audioTrack.current?.sync().start(startOffset + loopLength);
+                        setActive(true);
+                        setTimeout(() => setActive(false), (31.1 - beat) * Tone.Time("4n").toSeconds() * 1000);
+                    }
+                    
+                }
+            }).toDestination();
+            console.log(isActive);
+            if (!trackPlaying) {
+                increment();
+                setTrackPlaying(true);
+            }
+        },
     });
 
     useEffect(() => {
@@ -107,6 +113,7 @@ export function MusicCharacter() {
 
     return (
         <div>
+            <ProgressBar isActive={isActive} />
             <div ref={ref} className="w-[200px] h-[200px] flex justify-center items-center rounded-3xl border-8 border-black p-4" style={{ backgroundColor: currentStroke || "#4d4d4d", opacity: isOver && canDrop ? 0.7 : 1, transition: "background-color 0.3s" }}
                 onMouseEnter={(e) => {
                     if (currentStroke) {
@@ -129,7 +136,7 @@ export function MusicCharacter() {
                 <WaveformSVG player={audioTrack.current} stroke={currentStroke} />
             </div>
             <div className="inline-block" onClick={handleMute}>
-                <MicrophoneIcon/>
+                <MicrophoneIcon />
             </div>
         </div>
     )

@@ -31,7 +31,7 @@ export function Metronome({bpm = 125}: MetronomeProps) {
     }, [isPlaying, bpm, setBeat]);
 
     return (
-        <p>{beat}/32</p>
+        <p></p>
     )
 }
 

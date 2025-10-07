@@ -15,7 +15,7 @@ export function LoopTracker() {
     }, [beat]);
 
     return (
-        <p>{numberOfLoops} loops</p>
+        <p></p>
     )
 }
 

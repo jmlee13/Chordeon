@@ -28,6 +28,8 @@ export function MusicCharacter() {
     const [trackPlaying, setTrackPlaying] = useState(false);
 
     const [isActive, setActive] = useState(false);
+    const [isMuted, setMuted] = useState(false);
+    const [isMutable, setIsMutable] = useState(false);
 
     const [currentTrack, setCurrentTrack] = useState<string | null>("");
     const [currentStroke, setCurrentStroke] = useState<string>("");
@@ -64,14 +66,17 @@ export function MusicCharacter() {
                     startPlaying();
                     if (beat === 0) {
                         audioTrack.current?.sync().start(startOffset);
+                        setIsMutable(true);
                     }
                     else if (beat > 0 && beat < 17) {
                         audioTrack.current?.sync().start(startOffset + loopLength / 2, loopLength / 2);
+                        setIsMutable(true);
                         setActive(true);
                         setTimeout(() => setActive(false), (15.1 - beat) * Tone.Time("4n").toSeconds() * 1000);
                     }
                     else {
                         audioTrack.current?.sync().start(startOffset + loopLength);
+                        setIsMutable(true);
                         setActive(true);
                         setTimeout(() => setActive(false), (31.1 - beat) * Tone.Time("4n").toSeconds() * 1000);
                     }
@@ -102,12 +107,19 @@ export function MusicCharacter() {
             setTrackPlaying(false);
             decrement();
             setCurrentStroke('');
+            setActive(false);
+            setIsMutable(false);
         }
     }
 
-    const handleMute = () => {
+    const handleMute = () => {  
         if (audioTrack.current) {
             audioTrack.current.mute = !audioTrack.current.mute;
+        }
+        if (audioTrack.current?.mute) {
+            setMuted(true);
+        } else {
+            setMuted(false);
         }
     }
 
@@ -120,7 +132,7 @@ export function MusicCharacter() {
                         e.currentTarget.style.backgroundColor = currentHoverStroke;
                     }
                     else {
-                        e.currentTarget.style.backgroundColor = "#3a3a3a";
+                        e.currentTarget.style.backgroundColor = "#262626";
                     }
                 }}
 
@@ -136,7 +148,7 @@ export function MusicCharacter() {
                 <WaveformSVG player={audioTrack.current} stroke={currentStroke} />
             </div>
             <div className="inline-block" onClick={handleMute}>
-                <MicrophoneIcon />
+                <MicrophoneIcon isMuted={isMuted} isActive={isMutable}/>
             </div>
         </div>
     )

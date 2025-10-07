@@ -1,5 +1,5 @@
 import './index.css';
-import './App.css'
+import './App.css';
 import MusicCharacter from './components/MusicCharacter';
 import Metronome from './components/Metronome';
 import { BeatProvider }  from './components/BeatContext';

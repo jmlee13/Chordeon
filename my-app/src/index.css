@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'RushbladeDemoFont';
+  src: url('./fonts/Rushblade.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -33,6 +40,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow: hidden;
+  font-family: 'Rushblade', sans-serif;
+  padding: 0;
 }
 
 h1 {
@@ -71,3 +80,4 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+

@@ -72,13 +72,13 @@ export function MusicCharacter() {
                         audioTrack.current?.sync().start(startOffset + loopLength / 2, loopLength / 2);
                         setIsMutable(true);
                         setActive(true);
-                        setTimeout(() => setActive(false), (15.1 - beat) * Tone.Time("4n").toSeconds() * 1000);
+                        setTimeout(() => setActive(false), (15 - beat) * Tone.Time("4n").toSeconds() * 1000);
                     }
                     else {
                         audioTrack.current?.sync().start(startOffset + loopLength);
                         setIsMutable(true);
                         setActive(true);
-                        setTimeout(() => setActive(false), (31.1 - beat) * Tone.Time("4n").toSeconds() * 1000);
+                        setTimeout(() => setActive(false), (31 - beat) * Tone.Time("4n").toSeconds() * 1000);
                     }
                     
                 }
@@ -125,7 +125,7 @@ export function MusicCharacter() {
 
     return (
         <div>
-            <ProgressBar isActive={isActive} />
+            <ProgressBar isActive={isActive}/>
             <div ref={ref} className="w-[200px] h-[200px] flex justify-center items-center rounded-3xl border-8 border-black p-4" style={{ backgroundColor: currentStroke || "#4d4d4d", opacity: isOver && canDrop ? 0.7 : 1, transition: "background-color 0.3s" }}
                 onMouseEnter={(e) => {
                     if (currentStroke) {

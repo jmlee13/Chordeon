@@ -5,7 +5,11 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        rushblade: ['RushbladeDemoFont', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 };

@@ -109,6 +109,7 @@ export function MusicCharacter() {
             setCurrentStroke('');
             setActive(false);
             setIsMutable(false);
+            setMuted(false);
         }
     }
 

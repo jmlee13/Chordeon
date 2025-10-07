@@ -11,13 +11,14 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 function App() {
   return (
     <>
-      <h1 className="font-rushblade text-9xl flex justify-center xl:mb-[100px] lg:mb-[50px] lg: scale-75  text-white">Chordeon</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen text-center">
+      <h1 className="font-rushblade text-9xl text-white mb-10">Chordeon</h1>
       <BeatProvider>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col items-center justify-center">
           <Metronome />
           <LoopTracker />
           <DndProvider backend={HTML5Backend}>
-            <div className='flex justify-center xl:scale-100 lg:scale-75 gap-2'>
+            <div className='flex items-center justify-center gap-2 xl:scale-100 lg:scale-75 md:scale-50'>
               <MusicCharacter />
               <MusicCharacter />
               <MusicCharacter />
@@ -27,12 +28,8 @@ function App() {
               <MusicCharacter />
             </div>
           </DndProvider>
-
-          <div className='w-screen xl:h-10 lg:h-0'></div>
-
           <DndProvider backend={HTML5Backend}>
-            <div className="flex justify-center xl:scale-100 lg:scale-75">
-              <div className='flex justify-center max-w-[900px] flex-wrap gap-5'>
+              <div className='flex justify-center items-center max-w-[900px] flex-wrap gap-5 xl:scale-100 lg:scale-75 md:scale-50'>
                 <DraggableCharacter id='kickPattern' soundFile='/audio/edm1kick.wav' icon='/icons/kick.png' strokeColor='#ED2F07' strokeColorDark='#991a00' />
                 <DraggableCharacter id='snarePattern' soundFile='/audio/edm2snare.wav' icon='/icons/snare.png' strokeColor='#30C0FF' strokeColorDark='#2080ac' />
                 <DraggableCharacter id='hihatsPattern' soundFile='/audio/edm3hihats.wav' icon='/icons/hat.png' strokeColor='#F6FF4A' strokeColorDark='#b7be27' />
@@ -47,10 +44,10 @@ function App() {
                 <DraggableCharacter id='clapsPattern' soundFile='/audio/edm15claps.wav' icon='/icons/claps.png' strokeColor='#FFFFFF' strokeColorDark='#bfbfbf' />
                 <DraggableCharacter id='heyPattern' soundFile='/audio/edm16hey.wav' icon='/icons/hey.png' strokeColor='#ADFFFD' strokeColorDark='#79d2d1' />
               </div>
-            </div>
           </DndProvider>
         </div>
       </BeatProvider>
+      </div>
     </>
   )
 }

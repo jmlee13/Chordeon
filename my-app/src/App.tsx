@@ -1,4 +1,4 @@
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import './index.css';
 import './App.css';
 import MusicCharacter from './components/MusicCharacter';
@@ -12,18 +12,19 @@ import * as Tone from 'tone';
 
 function App() {
   useEffect(() => {
-    const startAudio = () => {
-      if (Tone.context.state !== 'running') {
-        Tone.start().then(() => {
-          console.log('Audio context started');
-        });
-      }
-      window.removeEventListener('click', startAudio);
-      window.removeEventListener('touchstart', startAudio);
+    const startAudio = async () => {
+    await Tone.start();
+        console.log('AudioContext resumed successfully');
+      document.removeEventListener('click', startAudio);
+      document.removeEventListener('touchstart', startAudio);
     };
-    window.addEventListener('click', startAudio);
-    window.addEventListener('touchstart', startAudio);
-  }, []);
+    document.addEventListener('click', startAudio);
+    document.addEventListener('touchstart', startAudio);
+    return () => {
+      document.removeEventListener('click', startAudio);
+      document.removeEventListener('touchstart', startAudio);
+    };
+  });
 
   return (
     <>

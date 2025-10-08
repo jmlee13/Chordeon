@@ -1,3 +1,4 @@
+import { useEffect} from 'react';
 import './index.css';
 import './App.css';
 import MusicCharacter from './components/MusicCharacter';
@@ -7,8 +8,23 @@ import DraggableCharacter from './components/DraggableCharacter';
 import LoopTracker from './components/LoopTracker';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import * as Tone from 'tone';
 
 function App() {
+  useEffect(() => {
+    const startAudio = () => {
+      if (Tone.context.state !== 'running') {
+        Tone.start().then(() => {
+          console.log('Audio context started');
+        });
+      }
+      document.removeEventListener('click', startAudio);
+      document.removeEventListener('touchstart', startAudio);
+    };
+    document.addEventListener('click', startAudio);
+    document.addEventListener('touchstart', startAudio);
+  }, []);
+  
   return (
     <>
     <div className="flex flex-col items-center justify-center min-h-screen text-center">

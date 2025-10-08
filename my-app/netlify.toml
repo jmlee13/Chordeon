@@ -1,7 +1,0 @@
-[build]
-base = "my-app"
-publish = "my-app/dist"
-command = "npm ci && npm run build"
-
-[build.environment]
-NODE_VERSION = "20"

@@ -18,13 +18,13 @@ function App() {
           console.log('Audio context started');
         });
       }
-      document.removeEventListener('click', startAudio);
-      document.removeEventListener('touchstart', startAudio);
+      window.removeEventListener('click', startAudio);
+      window.removeEventListener('touchstart', startAudio);
     };
-    document.addEventListener('click', startAudio);
-    document.addEventListener('touchstart', startAudio);
+    window.addEventListener('click', startAudio);
+    window.addEventListener('touchstart', startAudio);
   }, []);
-  
+
   return (
     <>
     <div className="flex flex-col items-center justify-center min-h-screen text-center">
